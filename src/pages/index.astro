@@ -1,0 +1,403 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Precompute pipeline signature positions server-side so the visual
+// always renders correctly even if client JS is delayed or blocked.
+const pipelineCount = 9;
+const pStartX = 40, pEndX = 860, pOrderedY = 32;
+const pRawYs = [10, 44, 18, 50, 26, 12, 40, 20, 48];
+const pipelineNodes = Array.from({ length: pipelineCount }, (_, i) => ({
+  x: pStartX + (i * (pEndX - pStartX) / (pipelineCount - 1)),
+  rawY: pRawYs[i],
+}));
+---
+<Layout title="Enrique Sáenz de Urturi — Desarrollador de software">
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <header>
+    <nav class="wrap">
+      <div class="brand">ESU<b>.</b>dev</div>
+      <div class="navbar-right">
+        <div class="navlinks" id="navlinks">
+          <a href="#sobre-mi">Sobre mí</a>
+          <a href="#experiencia">Experiencia</a>
+          <a href="#proyectos">Proyectos</a>
+          <a href="#skills">Skills</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"></path></svg>
+        </button>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero" style="border-top:none;">
+      <canvas class="hero-canvas" aria-hidden="true"></canvas>
+
+      <div class="eyebrow">Desarrollador de software · Zaragoza, España</div>
+      <h1 class="hero-title">
+        <span class="line-wrap"><span class="line">Convierto datos</span></span>
+        <span class="line-wrap"><span class="line">y procesos <em>desordenados</em></span></span>
+        <span class="line-wrap"><span class="line">en sistemas fiables.</span></span>
+      </h1>
+      <p class="lede">Desarrollo web, automatización de procesos y control de calidad. Trabajo tanto en la capa que ve el usuario como en el pipeline que mueve los datos por debajo — desde formularios hasta la transformación de registros bibliográficos a gran escala.</p>
+      <div class="cta-row">
+        <a class="btn primary magnetic" href="#proyectos">Ver proyectos</a>
+        <a class="btn ghost magnetic" href="mailto:kikesaenzz@gmail.com">Contactar</a>
+      </div>
+
+      <svg class="pipeline" viewBox="0 0 900 64" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <line class="link done" pathLength="1" x1={pStartX} y1={pOrderedY} x2={pEndX} y2={pOrderedY} />
+        {pipelineNodes.map((n) => (
+          <line class="link" x1={n.x} y1={n.rawY} x2={n.x} y2={pOrderedY} />
+        ))}
+        {pipelineNodes.map((n) => (
+          <circle class="node raw" cx={n.x} cy={n.rawY} r="3" />
+        ))}
+        {pipelineNodes.map((n, i) => (
+          <circle class="node done" style={`transition-delay:${i * 80}ms`} cx={n.x} cy={pOrderedY} r="3.4" />
+        ))}
+      </svg>
+      <script is:inline>document.currentScript.previousElementSibling.classList.add('pre');</script>
+    </section>
+
+    <section id="sobre-mi" class="about reveal">
+      <p class="kicker">Sobre mí</p>
+      <h2>Perfil</h2>
+      <p>Soy desarrollador de software especializado en <strong>desarrollo web y automatización de procesos</strong>. Mi trabajo actual combina el mantenimiento de plataformas de datos a gran escala con la creación de pequeñas herramientas que eliminan tareas manuales repetitivas. Me interesa especialmente ese punto intermedio: el software que no se ve, pero que hace que todo lo demás funcione de forma fiable.</p>
+      <p>Fuera del código, entreno con regularidad — fútbol sala, running y triatlón — algo que se nota en cómo trabajo: prefiero el progreso constante y bien medido a los atajos que luego hay que rehacer.</p>
+    </section>
+
+    <section id="experiencia" class="reveal">
+      <p class="kicker">Trayectoria</p>
+      <h2>Experiencia</h2>
+
+      <div class="job">
+        <div class="job-meta">Ene 2025 — Actualidad</div>
+        <div>
+          <p class="job-role">Desarrollador Web / QA Automation</p>
+          <p class="job-org">Memorándum Tecnología</p>
+          <ul>
+            <li>Desarrollo y mantenimiento de una plataforma de datos enlazados para la Biblioteca Nacional de España, incluyendo el pipeline de transformación e indexación de datos (MongoDB, ElasticSearch, Node.js) y el proceso de migración del sistema origen.</li>
+            <li>Desarrollo de soluciones de automatización de procesos (robots de gestión de solicitudes, validación de funcionalidades) para distintos clientes.</li>
+            <li>Diseño y ejecución de pruebas automatizadas con Selenium e integración de APIs en entornos de QA.</li>
+            <li>Desarrollo y mantenimiento de sitios web para clientes de diversos sectores, con WordPress, PHP, HTML5, CSS3, JavaScript y MySQL.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-meta">Mar 2024 — Jun 2024</div>
+        <div>
+          <p class="job-role">QA Tester (prácticas)</p>
+          <p class="job-org">Entertainment Solutions</p>
+          <ul>
+            <li>Ejecución de pruebas manuales y automatizadas con Selenium y JavaScript, automatizando casos de prueba para reducir el tiempo de validación de nuevas versiones.</li>
+            <li>Registro de incidencias mediante GitLab y colaboración con el equipo de desarrollo para garantizar la calidad del software.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="proyectos" class="reveal">
+      <p class="kicker">Casos de estudio</p>
+      <h2>Proyectos</h2>
+      <div class="grid-projects">
+
+        <div class="card tilt">
+          <svg class="card-icon icon-data" viewBox="0 0 48 20" aria-hidden="true">
+            <line x1="6" y1="10" x2="42" y2="10" class="icon-link"></line>
+            <circle cx="6" cy="10" r="4" class="icon-dot d1"></circle>
+            <circle cx="24" cy="10" r="4" class="icon-dot d2"></circle>
+            <circle cx="42" cy="10" r="4" class="icon-dot d3"></circle>
+          </svg>
+          <div class="tag">Datos & Infraestructura</div>
+          <h3>Plataforma de datos enlazados — sector cultural</h3>
+          <p>Mantenimiento de un pipeline que transforma registros bibliográficos en datos enlazados públicos, y diagnóstico de incidencias en el proceso de indexación de un catálogo de millones de registros.</p>
+          <div class="stack">
+            <span class="chip">MongoDB</span>
+            <span class="chip">ElasticSearch</span>
+            <span class="chip">Node.js</span>
+          </div>
+        </div>
+
+        <div class="card tilt">
+          <svg class="card-icon icon-automation" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="icon-spin" d="M12 4a8 8 0 1 1-5.66 2.34" fill="none" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M6.34 3.34 6.34 8 11 8" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <div class="tag">Automatización</div>
+          <h3>Robots de gestión de solicitudes</h3>
+          <p>Desarrollo de automatizaciones que sustituyen procesos manuales de tramitación y validación de solicitudes para distintos clientes, reduciendo el trabajo repetitivo del equipo.</p>
+          <div class="stack">
+            <span class="chip">Python</span>
+            <span class="chip">C#</span>
+            <span class="chip">APIs REST</span>
+          </div>
+        </div>
+
+        <div class="card tilt">
+          <svg class="card-icon icon-qa" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="none" stroke-width="1.6" class="icon-ring"></circle>
+            <path class="icon-check" d="M7.5 12.5 10.5 15.5 16.5 8.5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <div class="tag">Calidad de software</div>
+          <h3>Suites de testing automatizado</h3>
+          <p>Diseño y mantenimiento de baterías de pruebas automatizadas para validar funcionalidades antes de cada despliegue, integradas con el flujo de trabajo del equipo de QA.</p>
+          <div class="stack">
+            <span class="chip">Selenium</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">GitLab</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="skills" class="reveal">
+      <p class="kicker">Caja de herramientas</p>
+      <h2>Skills</h2>
+      <p class="lede" style="font-size:15px; margin-bottom:8px;">Arrástralas si quieres desordenarlas — vuelven a flotar solas.</p>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Lenguajes & Frameworks</h4>
+          <div class="skill-tags">
+            <span data-tag>JavaScript</span><span data-tag>PHP</span><span data-tag>C#</span><span data-tag>Python</span><span data-tag>Java</span><span data-tag>SQL</span><span data-tag>Laravel</span><span data-tag>WordPress</span><span data-tag>Elementor</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Datos, QA & Cloud</h4>
+          <div class="skill-tags">
+            <span data-tag>MongoDB</span><span data-tag>ElasticSearch</span><span data-tag>MySQL</span><span data-tag>Selenium</span><span data-tag>APIs REST</span><span data-tag>Git / GitLab</span><span data-tag>Azure (en formación)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="reveal" style="border-bottom: none;">
+      <p class="kicker">Contacto</p>
+      <h2>Hablemos</h2>
+      <div class="contact-inner">
+        <p class="lede" style="margin-bottom:0;">¿Buscas a alguien para tu equipo de desarrollo, datos o QA? Escríbeme, respondo rápido.</p>
+        <div class="contact-list">
+          <a href="mailto:kikesaenzz@gmail.com">kikesaenzz@gmail.com</a>
+          <a href="tel:+34644219817">+34 644 21 98 17</a>
+          <span style="color:var(--ink-soft);">Zaragoza, España</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    <span>Enrique Sáenz de Urturi — © 2026</span>
+    <span>Diseñado y construido con Astro.</span>
+  </footer>
+
+  <script is:inline>
+  (function () {
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // Scroll progress bar
+    const progressBar = document.querySelector('.scroll-progress');
+    if (progressBar) {
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+        progressBar.style.width = scrolled + '%';
+      });
+    }
+
+    // Interactive dot-grid canvas in hero
+    (function () {
+      const canvas = document.querySelector('.hero-canvas');
+      const hero = document.querySelector('.hero');
+      if (!canvas || !hero || !canvas.getContext) return;
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const spacing = 34;
+      let w = 0, h = 0, dots = [];
+      let mouseX = -9999, mouseY = -9999;
+
+      function resize() {
+        const rect = hero.getBoundingClientRect();
+        w = rect.width; h = rect.height;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        dots = [];
+        for (let y = spacing / 2; y < h; y += spacing) {
+          for (let x = spacing / 2; x < w; x += spacing) {
+            dots.push({ x, y });
+          }
+        }
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+      });
+      hero.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
+
+      function getVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const inkSoft = getVar('--ink-soft');
+        const accent = getVar('--accent');
+        const radius = 130;
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+          const dx = d.x - mouseX, dy = d.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          let size = 1.3, alpha = 0.3, color = inkSoft;
+          if (dist < radius) {
+            const f = 1 - dist / radius;
+            size = 1.3 + f * 3.4;
+            alpha = 0.3 + f * 0.7;
+            color = accent;
+          }
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        if (!reduceMotion) requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    // Magnetic buttons
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    if (!isTouch) {
+      document.querySelectorAll('.magnetic').forEach((btn) => {
+        btn.addEventListener('mousemove', (e) => {
+          const r = btn.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          btn.style.transform = `translate(${x * 0.22}px, ${y * 0.3}px)`;
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
+      });
+
+      // Tilt cards
+      document.querySelectorAll('.tilt').forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(700px) rotateX(${py * -6}deg) rotateY(${px * 8}deg) translateY(-2px)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(700px) rotateX(0) rotateY(0)'; });
+      });
+    }
+
+    // Pipeline signature animation: just toggle the .pre class on scroll-into-view
+    (function () {
+      const svg = document.querySelector('.pipeline');
+      if (!svg) return;
+      let animated = false;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !animated) {
+            animated = true;
+            requestAnimationFrame(() => svg.classList.remove('pre'));
+          }
+        });
+      }, { threshold: 0.35 });
+      obs.observe(svg);
+    })();
+    // Mobile menu
+    const menuBtn = document.getElementById('menu-toggle');
+    const navlinks = document.getElementById('navlinks');
+    if (menuBtn && navlinks) {
+      menuBtn.addEventListener('click', () => navlinks.classList.toggle('open'));
+      navlinks.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => navlinks.classList.remove('open')));
+    }
+
+    // Skills: "loose drawer" — idle float + drag with settle
+    (function () {
+      const tags = document.querySelectorAll('[data-tag]');
+      if (!tags.length) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      tags.forEach((tag, i) => {
+        const rot = (Math.sin(i * 12.9898) * 43758.5453 % 1) * 14 - 7; // deterministic pseudo-random -7..7
+        const phase = i * 0.7;
+        const ampX = 3 + (i % 3);
+        const ampY = 4 + (i % 4);
+        let dragX = 0, dragY = 0, baseRotate = rot;
+        let dragging = false, startX = 0, startY = 0, originX = 0, originY = 0;
+        let settleTo = { x: 0, y: 0 };
+        let settling = false;
+        let t = phase;
+
+        tag.style.transformOrigin = '50% 50%';
+
+        function render(idleX, idleY) {
+          tag.style.transform = `translate(${dragX + idleX}px, ${dragY + idleY}px) rotate(${baseRotate}deg)`;
+        }
+
+        if (!reduce) {
+          function loop() {
+            t += 0.008;
+            const idleX = dragging ? 0 : Math.sin(t + phase) * ampX;
+            const idleY = dragging ? 0 : Math.cos(t * 1.3 + phase) * ampY;
+            if (settling) {
+              dragX += (settleTo.x - dragX) * 0.08;
+              dragY += (settleTo.y - dragY) * 0.08;
+              if (Math.abs(dragX - settleTo.x) < 0.3 && Math.abs(dragY - settleTo.y) < 0.3) settling = false;
+            }
+            render(idleX, idleY);
+            requestAnimationFrame(loop);
+          }
+          requestAnimationFrame(loop);
+        }
+
+        tag.addEventListener('pointerdown', (e) => {
+          dragging = true; settling = false;
+          tag.classList.add('dragging');
+          tag.setPointerCapture(e.pointerId);
+          startX = e.clientX; startY = e.clientY;
+          originX = dragX; originY = dragY;
+        });
+        tag.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          dragX = originX + (e.clientX - startX);
+          dragY = originY + (e.clientY - startY);
+          baseRotate = rot + (e.clientX - startX) * 0.06;
+        });
+        function release() {
+          if (!dragging) return;
+          dragging = false;
+          tag.classList.remove('dragging');
+          // settle back near a small random offset from origin — stays a little "scattered"
+          settleTo = { x: (Math.random() - 0.5) * 10, y: (Math.random() - 0.5) * 10 };
+          settling = true;
+          baseRotate = rot;
+        }
+        tag.addEventListener('pointerup', release);
+        tag.addEventListener('pointercancel', release);
+      });
+    })();
+  })();
+  </script>
+</Layout>
