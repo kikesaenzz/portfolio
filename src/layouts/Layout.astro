@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 interface Props { title: string; description?: string; }
-const { title, description = "Desarrollador de software especializado en datos, automatización y QA." } = Astro.props;
+const { title, description = "Enrique Sáenz de Urturi — desarrollador de software en Zaragoza. Datos, automatización y calidad, contadas cerca." } = Astro.props;
 ---
 <!doctype html>
 <html lang="es">
@@ -10,14 +10,15 @@ const { title, description = "Desarrollador de software especializado en datos, 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script is:inline>
       (function () {
         var THEMES = {
-          light: { bg:'#F7F6F3', bgAlt:'#EFEDE7', ink:'#16181B', inkSoft:'#52565C', line:'#DAD7CE', accent:'#2B3A55', accent2:'#8A6E4B', accentSoft:'#DCE2ED', paper:'#FFFFFF' },
-          dark:  { bg:'#14161A', bgAlt:'#1B1E24', ink:'#F3F1EB', inkSoft:'#9DA1A8', line:'#2C2F36', accent:'#8FA6D1', accent2:'#D4B888', accentSoft:'#212B3D', paper:'#1A1D23' }
+          light: { bg:'#FBF3E9', bgAlt:'#F3E1C8', ink:'#2B1D14', inkSoft:'#6E5A48', line:'#E7D3B4', accent:'#C6602E', accent2:'#B98A2E', accentSoft:'#F3DCC0', paper:'#FFFCF7' },
+          dark:  { bg:'#20160F', bgAlt:'#2A1D14', ink:'#F6E9D8', inkSoft:'#C7AC90', line:'#3C2B1E', accent:'#E58A54', accent2:'#E4BB6B', accentSoft:'#3C291B', paper:'#271A11' }
         };
         window.__applyTheme = function (name) {
           var t = THEMES[name] || THEMES.light;
@@ -41,36 +42,13 @@ const { title, description = "Desarrollador de software especializado en datos, 
     </script>
   </head>
   <body>
-    <div class="cursor-ring" aria-hidden="true"></div>
-    <div class="cursor-dot" aria-hidden="true"></div>
     <slot />
     <script is:inline>
       (function () {
-        // Custom cursor: move the dot/ring elements directly (no CSS var indirection)
-        const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-        if (!isTouchDevice) {
-          const dot = document.querySelector('.cursor-dot');
-          const ring = document.querySelector('.cursor-ring');
-          let shown = false;
-          function moveCursor(x, y) {
-            if (!shown) { shown = true; dot.style.opacity = '1'; ring.style.opacity = '.55'; }
-            dot.style.transform = `translate3d(${x - 5}px, ${y - 5}px, 0)`;
-            ring.style.transform = `translate3d(${x - 17}px, ${y - 17}px, 0)`;
-          }
-          window.addEventListener('pointermove', (e) => moveCursor(e.clientX, e.clientY));
-          window.addEventListener('mousemove', (e) => moveCursor(e.clientX, e.clientY));
-          document.body.classList.add('has-custom-cursor');
-          document.querySelectorAll('a, button, .card, .skill-tags span').forEach((el) => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
-          });
-        }
-
-        // Theme toggle
-        const themeBtn = document.getElementById('theme-toggle');
+        var themeBtn = document.getElementById('theme-toggle');
         if (themeBtn) {
-          themeBtn.addEventListener('click', () => {
-            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          themeBtn.addEventListener('click', function () {
+            var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             window.__applyTheme(next);
             try { localStorage.setItem('theme', next); } catch (e) {}
           });
