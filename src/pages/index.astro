@@ -212,6 +212,29 @@ import Layout from '../layouts/Layout.astro';
       });
     }
 
+    // Hero blobs: subtle parallax following the cursor (desktop only)
+    (function () {
+      var hero = document.querySelector('.hero');
+      var blobs = document.querySelectorAll('.hero .blob');
+      if (!hero || !blobs.length) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+      if (reduce || isTouch) return;
+
+      hero.addEventListener('mousemove', function (e) {
+        var r = hero.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        blobs.forEach(function (b, i) {
+          var strength = i === 0 ? 18 : 12;
+          b.style.transform = 'translate(' + (px * strength).toFixed(1) + 'px, ' + (py * strength).toFixed(1) + 'px)';
+        });
+      });
+      hero.addEventListener('mouseleave', function () {
+        blobs.forEach(function (b) { b.style.transform = 'translate(0,0)'; });
+      });
+    })();
+
     // Mobile menu
     var menuBtn = document.getElementById('menu-toggle');
     var navlinks = document.getElementById('navlinks');
