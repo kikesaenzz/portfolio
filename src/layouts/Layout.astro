@@ -42,6 +42,7 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
     </script>
   </head>
   <body>
+    <div class="cursor-glow" aria-hidden="true"></div>
     <div class="cursor-ring" aria-hidden="true"></div>
     <div class="cursor-dot" aria-hidden="true"></div>
     <slot />
@@ -58,16 +59,34 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
 
         // Custom cursor
         var isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!isTouchDevice) {
           var dot = document.querySelector('.cursor-dot');
           var ring = document.querySelector('.cursor-ring');
+          var glow = document.querySelector('.cursor-glow');
           var shown = false;
           function moveCursor(x, y) {
-            if (!shown) { shown = true; dot.style.opacity = '1'; ring.style.opacity = '1'; }
+            if (!shown) { shown = true; dot.style.opacity = '1'; ring.style.opacity = '1'; if (glow) glow.style.opacity = '1'; }
             dot.style.transform = 'translate3d(' + (x - 5) + 'px, ' + (y - 5) + 'px, 0)';
             ring.style.transform = 'translate3d(' + (x - 17) + 'px, ' + (y - 17) + 'px, 0)';
           }
           window.addEventListener('pointermove', function (e) { moveCursor(e.clientX, e.clientY); });
+
+          // Glow trails a little behind for a soft, ambient feel
+          if (glow && !reduceMotion) {
+            var gx = -9999, gy = -9999, tx = -9999, ty = -9999;
+            window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });
+            (function glowLoop() {
+              gx += (tx - gx) * 0.08;
+              gy += (ty - gy) * 0.08;
+              glow.style.transform = 'translate3d(' + (gx - 230) + 'px, ' + (gy - 230) + 'px, 0)';
+              requestAnimationFrame(glowLoop);
+            })();
+          } else if (glow) {
+            window.addEventListener('pointermove', function (e) {
+              glow.style.transform = 'translate3d(' + (e.clientX - 230) + 'px, ' + (e.clientY - 230) + 'px, 0)';
+            });
+          }
           document.body.classList.add('has-custom-cursor');
           function bindHoverTargets() {
             document.querySelectorAll('a, button, .card, .skill-tags span').forEach(function (el) {

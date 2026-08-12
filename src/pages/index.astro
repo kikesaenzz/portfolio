@@ -38,7 +38,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="eyebrow">QA Automation Engineer · Zaragoza, España</div>
       <h1>
         <span class="line-wrap"><span class="line">Hola, soy Enrique.</span></span>
-        <span class="line-wrap"><span class="line">Automatizo la</span></span>
+        <span class="line-wrap"><span class="line">Automatizaciones de</span></span>
         <span class="line-wrap"><span class="line hero-giant">calidad</span></span>
       </h1>
       <p class="lede">Diseño y automatizo pruebas de software con Selenium, integrando APIs en entornos de QA para detectar antes que nadie lo que puede romperse en producción. Complemento este trabajo con desarrollo web y automatización de procesos de datos a gran escala, entendiendo el producto de principio a fin, no solo cómo probarlo.</p>
@@ -67,7 +67,7 @@ import Layout from '../layouts/Layout.astro';
       <p class="kicker">Trayectoria</p>
       <h2>Experiencia</h2>
 
-      <div class="job">
+      <div class="job item-reveal">
         <div class="job-meta">Ene 2025 — Actualidad</div>
         <div>
           <p class="job-role">Desarrollador Web / QA Automation</p>
@@ -81,7 +81,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <div class="job">
+      <div class="job item-reveal">
         <div class="job-meta">Mar 2024 — Jun 2024</div>
         <div>
           <p class="job-role">QA Tester (prácticas)</p>
@@ -101,7 +101,7 @@ import Layout from '../layouts/Layout.astro';
       <h2>Proyectos</h2>
       <div class="grid-projects">
 
-        <div class="card">
+        <div class="card item-reveal">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M8.5 12.5 11 15 15.5 9"></path></svg>
           </div>
@@ -115,7 +115,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <div class="card">
+        <div class="card item-reveal">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a8 8 0 1 1-5.66 2.34"></path><path d="M6.34 3.34 6.34 8 11 8"></path></svg>
           </div>
@@ -129,7 +129,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <div class="card">
+        <div class="card item-reveal">
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="2.4"></circle><circle cx="19" cy="6" r="2.4"></circle><circle cx="19" cy="18" r="2.4"></circle><path d="M7.2 11.2 16.8 6.9M7.2 12.8 16.8 17.1"></path></svg>
           </div>
@@ -153,19 +153,19 @@ import Layout from '../layouts/Layout.astro';
       <h2>Skills</h2>
       <p class="lede" style="font-size:15px; margin-bottom:0;">Arrástralas si quieres desordenarlas: vuelven a acomodarse solas.</p>
       <div class="skills-grid">
-        <div class="skill-group">
+        <div class="skill-group item-reveal">
           <h4>QA & Testing</h4>
           <div class="skill-tags">
             <span data-tag>Selenium</span><span data-tag>APIs REST</span><span data-tag>Git / GitLab</span>
           </div>
         </div>
-        <div class="skill-group">
+        <div class="skill-group item-reveal">
           <h4>Lenguajes & Frameworks</h4>
           <div class="skill-tags">
             <span data-tag>JavaScript</span><span data-tag>PHP</span><span data-tag>C#</span><span data-tag>Python</span><span data-tag>Java</span><span data-tag>SQL</span><span data-tag>Laravel</span><span data-tag>WordPress</span><span data-tag>Elementor</span>
           </div>
         </div>
-        <div class="skill-group">
+        <div class="skill-group item-reveal">
           <h4>Datos & Cloud</h4>
           <div class="skill-tags">
             <span data-tag>MongoDB</span><span data-tag>ElasticSearch</span><span data-tag>MySQL</span><span data-tag>Azure (en formación)</span>
@@ -204,6 +204,18 @@ import Layout from '../layouts/Layout.astro';
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
 
+    // Once the giant hero word's line-up entrance finishes, release the
+    // animation (and pin it at its resting position) so the scroll-driven
+    // GSAP parallax can take over its transform. The other two lines keep
+    // their animation as-is (forwards fill already holds them visible).
+    var giant = document.querySelector('.hero-giant');
+    if (giant) {
+      giant.addEventListener('animationend', function () {
+        giant.style.animation = 'none';
+        giant.style.transform = 'translateY(0)';
+      }, { once: true });
+    }
+
     // Scroll progress bar
     var progressBar = document.querySelector('.scroll-progress');
     if (progressBar) {
@@ -214,28 +226,6 @@ import Layout from '../layouts/Layout.astro';
       });
     }
 
-    // Hero blobs: subtle parallax following the cursor (desktop only)
-    (function () {
-      var hero = document.querySelector('.hero');
-      var blobs = document.querySelectorAll('.hero .blob');
-      if (!hero || !blobs.length) return;
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-      if (reduce || isTouch) return;
-
-      hero.addEventListener('mousemove', function (e) {
-        var r = hero.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        blobs.forEach(function (b, i) {
-          var strength = i === 0 ? 18 : 12;
-          b.style.transform = 'translate(' + (px * strength).toFixed(1) + 'px, ' + (py * strength).toFixed(1) + 'px)';
-        });
-      });
-      hero.addEventListener('mouseleave', function () {
-        blobs.forEach(function (b) { b.style.transform = 'translate(0,0)'; });
-      });
-    })();
 
     // Hero particle field: lightweight canvas 2D, no WebGL
     (function () {
@@ -327,6 +317,14 @@ import Layout from '../layouts/Layout.astro';
             pointer.y = e.clientY - r.top;
           });
           hero.addEventListener('mouseleave', function () { pointer.x = -9999; pointer.y = -9999; });
+        } else {
+          hero.addEventListener('touchmove', function (e) {
+            if (!e.touches || !e.touches[0]) return;
+            var r = hero.getBoundingClientRect();
+            pointer.x = e.touches[0].clientX - r.left;
+            pointer.y = e.touches[0].clientY - r.top;
+          }, { passive: true });
+          hero.addEventListener('touchend', function () { pointer.x = -9999; pointer.y = -9999; });
         }
       }
     })();
@@ -404,5 +402,40 @@ import Layout from '../layouts/Layout.astro';
       });
     })();
   })();
+  </script>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
+
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Staggered per-item reveals: jobs, project cards, skill groups each
+    // appear on their own beat as you scroll to them, instead of all at once.
+    if (reduce) {
+      document.querySelectorAll('.item-reveal').forEach(function (el) { el.classList.add('visible'); });
+    } else {
+      ScrollTrigger.batch('.item-reveal', {
+        start: 'top 88%',
+        once: true,
+        onEnter: function (batch) {
+          batch.forEach(function (el, i) {
+            setTimeout(function () { el.classList.add('visible'); }, i * 90);
+          });
+        },
+      });
+
+      // Hero: giant word, blobs and eyebrow drift at different speeds as
+      // you scroll past — a cheap, GPU-friendly stand-in for the WebGL
+      // "morph on scroll" feeling, without the WebGL.
+      gsap.timeline({
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
+      })
+        .to('.hero-giant', { yPercent: -30, scale: 0.94, opacity: 0.35, ease: 'none' }, 0)
+        .to('.blob.b1', { y: -70, x: 24, ease: 'none' }, 0)
+        .to('.blob.b2', { y: 50, x: -18, ease: 'none' }, 0)
+        .to('.eyebrow', { y: -18, opacity: 0.35, ease: 'none' }, 0);
+    }
   </script>
 </Layout>
