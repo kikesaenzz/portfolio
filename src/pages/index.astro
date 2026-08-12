@@ -29,6 +29,7 @@ import Layout from '../layouts/Layout.astro';
   <main class="wrap">
 
     <section class="hero">
+      <canvas class="hero-particles" aria-hidden="true"></canvas>
       <div class="blob b1" aria-hidden="true"></div>
       <div class="blob b2" aria-hidden="true"></div>
 
@@ -37,7 +38,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="eyebrow">QA Automation Engineer · Zaragoza, España</div>
       <h1>
         <span class="line-wrap"><span class="line">Hola, soy Enrique.</span></span>
-        <span class="line-wrap"><span class="line">Automatizo la <em>calidad</em>.</span></span>
+        <span class="line-wrap"><span class="line">Automatizo la</span></span>
+        <span class="line-wrap"><span class="line hero-giant">calidad</span></span>
       </h1>
       <p class="lede">Diseño y automatizo pruebas de software con Selenium, integrando APIs en entornos de QA para detectar antes que nadie lo que puede romperse en producción. Complemento este trabajo con desarrollo web y automatización de procesos de datos a gran escala, entendiendo el producto de principio a fin, no solo cómo probarlo.</p>
       <div class="cta-row">
@@ -233,6 +235,100 @@ import Layout from '../layouts/Layout.astro';
       hero.addEventListener('mouseleave', function () {
         blobs.forEach(function (b) { b.style.transform = 'translate(0,0)'; });
       });
+    })();
+
+    // Hero particle field: lightweight canvas 2D, no WebGL
+    (function () {
+      var canvas = document.querySelector('.hero-particles');
+      var hero = document.querySelector('.hero');
+      if (!canvas || !hero) return;
+      var ctx = canvas.getContext('2d');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+      var particles = [];
+      var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var pointer = { x: -9999, y: -9999 };
+      var running = false;
+      var rafId = null;
+
+      function colors() {
+        var s = getComputedStyle(document.documentElement);
+        return [s.getPropertyValue('--accent').trim(), s.getPropertyValue('--accent-2').trim(), s.getPropertyValue('--ink-soft').trim()];
+      }
+
+      function resize() {
+        var r = hero.getBoundingClientRect();
+        W = r.width; H = r.height;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        var count = Math.min(60, Math.round((W * H) / 18000));
+        var pal = colors();
+        particles = Array.from({ length: count }, function () {
+          return {
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: 1 + Math.random() * 1.8,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.15,
+            c: pal[Math.floor(Math.random() * pal.length)],
+            a: 0.25 + Math.random() * 0.35,
+          };
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(function (p) {
+          var dx = p.x - pointer.x, dy = p.y - pointer.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            var force = (110 - dist) / 110;
+            p.x += (dx / (dist || 1)) * force * 1.6;
+            p.y += (dy / (dist || 1)) * force * 1.6;
+          }
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.c;
+          ctx.globalAlpha = p.a;
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      function loop() {
+        if (!running) return;
+        draw();
+        rafId = requestAnimationFrame(loop);
+      }
+
+      function start() { if (running) return; running = true; loop(); }
+      function stop() { running = false; if (rafId) cancelAnimationFrame(rafId); }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      if (reduce) {
+        draw();
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
+        }, { threshold: 0.05 });
+        io.observe(hero);
+
+        if (!isTouch) {
+          hero.addEventListener('mousemove', function (e) {
+            var r = hero.getBoundingClientRect();
+            pointer.x = e.clientX - r.left;
+            pointer.y = e.clientY - r.top;
+          });
+          hero.addEventListener('mouseleave', function () { pointer.x = -9999; pointer.y = -9999; });
+        }
+      }
     })();
 
     // Mobile menu

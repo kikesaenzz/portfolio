@@ -13,7 +13,7 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script is:inline>
       (function () {
         var THEMES = {
@@ -42,6 +42,8 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
     </script>
   </head>
   <body>
+    <div class="cursor-ring" aria-hidden="true"></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
     <slot />
     <script is:inline>
       (function () {
@@ -52,6 +54,31 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
             window.__applyTheme(next);
             try { localStorage.setItem('theme', next); } catch (e) {}
           });
+        }
+
+        // Custom cursor
+        var isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+        if (!isTouchDevice) {
+          var dot = document.querySelector('.cursor-dot');
+          var ring = document.querySelector('.cursor-ring');
+          var shown = false;
+          function moveCursor(x, y) {
+            if (!shown) { shown = true; dot.style.opacity = '1'; ring.style.opacity = '1'; }
+            dot.style.transform = 'translate3d(' + (x - 5) + 'px, ' + (y - 5) + 'px, 0)';
+            ring.style.transform = 'translate3d(' + (x - 17) + 'px, ' + (y - 17) + 'px, 0)';
+          }
+          window.addEventListener('pointermove', function (e) { moveCursor(e.clientX, e.clientY); });
+          document.body.classList.add('has-custom-cursor');
+          function bindHoverTargets() {
+            document.querySelectorAll('a, button, .card, .skill-tags span').forEach(function (el) {
+              if (el.__cursorBound) return;
+              el.__cursorBound = true;
+              el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-active'); });
+              el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-active'); });
+            });
+          }
+          bindHoverTargets();
+          new MutationObserver(bindHoverTargets).observe(document.body, { childList: true, subtree: true });
         }
       })();
     </script>
