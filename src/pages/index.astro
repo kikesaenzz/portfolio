@@ -33,22 +33,24 @@ import Layout from '../layouts/Layout.astro';
       <div class="blob b1" aria-hidden="true"></div>
       <div class="blob b2" aria-hidden="true"></div>
 
-      <div class="avatar-badge" aria-hidden="true">E</div>
+      <div class="wrap hero-inner">
+        <div class="avatar-badge" aria-hidden="true">E</div>
 
-      <div class="eyebrow">QA Automation Engineer · Zaragoza, España</div>
-      <h1>
-        <span class="line-wrap"><span class="line">Hola, soy Enrique.</span></span>
-        <span class="line-wrap"><span class="line">Automatizaciones de</span></span>
-        <span class="line-wrap"><span class="line hero-giant">calidad</span></span>
-      </h1>
-      <p class="lede">Diseño y automatizo pruebas de software con Selenium, integrando APIs en entornos de QA para detectar antes que nadie lo que puede romperse en producción. Complemento este trabajo con desarrollo web y automatización de procesos de datos a gran escala, entendiendo el producto de principio a fin, no solo cómo probarlo.</p>
-      <div class="cta-row">
-        <a class="btn primary" href="#proyectos">Ver proyectos</a>
-        <a class="btn ghost" href="/CV-Enrique-Saenz-de-Urturi.pdf" download>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>
-          Descargar CV
-        </a>
-        <a class="btn ghost" href="mailto:kikesaenzz@gmail.com">Escríbeme</a>
+        <div class="eyebrow">QA Automation Engineer · Zaragoza, España</div>
+        <h1>
+          <span class="line-wrap"><span class="line">Hola, soy Enrique.</span></span>
+          <span class="line-wrap"><span class="line">Automatizaciones de</span></span>
+          <span class="line-wrap"><span class="line hero-giant">calidad</span></span>
+        </h1>
+        <p class="lede">Diseño y automatizo pruebas de software con Selenium, integrando APIs en entornos de QA para detectar antes que nadie lo que puede romperse en producción. Complemento este trabajo con desarrollo web y automatización de procesos de datos a gran escala, entendiendo el producto de principio a fin, no solo cómo probarlo.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#proyectos">Ver proyectos</a>
+          <a class="btn ghost" href="/CV-Enrique-Saenz-de-Urturi.pdf" download>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>
+            Descargar CV
+          </a>
+          <a class="btn ghost" href="mailto:kikesaenzz@gmail.com">Escríbeme</a>
+        </div>
       </div>
     </section>
 
@@ -198,6 +200,9 @@ import Layout from '../layouts/Layout.astro';
 
   <script is:inline>
   (function () {
+    if (window.__setFullBleed) window.__setFullBleed();
+    window.addEventListener('load', function () { if (window.__setFullBleed) window.__setFullBleed(); });
+
     // Reveal on scroll
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });

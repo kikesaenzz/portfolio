@@ -38,6 +38,19 @@ const { title, description = "Enrique Sáenz de Urturi — desarrollador de soft
         try { stored = localStorage.getItem('theme'); } catch (e) {}
         var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         window.__applyTheme(theme);
+
+        // Scrollbar-accurate full-bleed width (100vw includes the scrollbar
+        // in most browsers, which causes a few px of real horizontal
+        // overflow — this uses the actual scrollbar-free width instead).
+        // Recomputed on resize and once more after the page has rendered,
+        // since the scrollbar (and thus clientWidth) isn't settled yet
+        // this early in <head>.
+        function setFullBleed() {
+          document.documentElement.style.setProperty('--vw', document.documentElement.clientWidth + 'px');
+        }
+        setFullBleed();
+        window.__setFullBleed = setFullBleed;
+        window.addEventListener('resize', setFullBleed);
       })();
     </script>
   </head>
