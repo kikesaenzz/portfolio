@@ -253,7 +253,7 @@ html[data-theme="dark"] .job-org{ color: var(--accent); }
 @media (max-width: 600px){ .job{ grid-template-columns: 1fr; gap:6px; padding: 18px 16px; } }
 
 /* ---------- projects ---------- */
-.grid-projects{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-projects{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 @media (max-width: 820px){ .grid-projects{ grid-template-columns: 1fr; } }
 .card{
   background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-l);
@@ -278,8 +278,7 @@ html[data-theme="dark"] .card .tag{ color: var(--accent); }
 .chip{ font-size: 12px; font-weight: 600; padding: 5px 12px; background: var(--bg-alt); color: var(--ink-soft); border-radius: 999px; }
 
 /* ---------- skills ---------- */
-.skills-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px 40px; }
-@media (max-width: 900px){ .skills-grid{ grid-template-columns: 1fr 1fr; } }
+.skills-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 24px 40px; }
 @media (max-width: 560px){ .skills-grid{ grid-template-columns: 1fr; } }
 .skill-group{ transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1), filter .6s ease; }
 .skill-group h4{ font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-soft); margin: 0 0 16px; }
