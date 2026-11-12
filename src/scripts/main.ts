@@ -121,19 +121,29 @@ function buildAnimations() {
   const lis = $$('.rail li');
   const fill = $('.rail-fill');
   const setActive = (i: number) => lis.forEach((li, k) => { li.classList.toggle('active', k === i); li.classList.toggle('done', k < i); });
-  ids.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    ScrollTrigger.create({
-      trigger: el, start: 'top 60%', end: 'bottom 60%',
-      onToggle: (self) => { if (self.isActive) setActive(i); },
-      onUpdate: (self) => {
-        if (!self.isActive || !fill) return;
-        const v = i >= ids.length - 1 ? 1 : (i + self.progress) / (ids.length - 1);
-        gsap.set(fill, { scaleY: Math.min(1, v) });
-      },
+  // La sección activa se calcula con la posición REAL de cada sección en pantalla.
+  // Así no depende de los espacios que añaden las escenas fijadas (pin) y nunca se desincroniza.
+  const secEls = ids.map((id) => document.getElementById(id)).filter((e): e is HTMLElement => !!e);
+  let railQueued = false;
+  const updateRail = () => {
+    railQueued = false;
+    const line = innerHeight * 0.55;
+    let idx = 0;
+    let prog = 0;
+    secEls.forEach((el, i) => {
+      const r = el.getBoundingClientRect();
+      if (r.top <= line) { idx = i; prog = Math.min(1, Math.max(0, (line - r.top) / Math.max(1, r.height))); }
     });
-  });
+    const atBottom = scrollY + innerHeight >= document.documentElement.scrollHeight - 4;
+    if (atBottom) { idx = secEls.length - 1; prog = 1; }
+    setActive(idx);
+    if (fill) gsap.set(fill, { scaleY: Math.min(1, idx >= ids.length - 1 ? 1 : (idx + prog) / (ids.length - 1)) });
+  };
+  const queueRail = () => { if (!railQueued) { railQueued = true; requestAnimationFrame(updateRail); } };
+  addEventListener('scroll', queueRail, { passive: true });
+  addEventListener('resize', queueRail);
+  ScrollTrigger.addEventListener('refresh', queueRail);
+  queueRail();
   if (!reduce) {
     gsap.to('.progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
   }
@@ -290,6 +300,7 @@ async function boot() {
   try { await document.fonts.ready; } catch { /* continuar */ }
   prepareHero();
   buildAnimations();
+  ScrollTrigger.sort(); // las escenas fijadas se crean después: reordenar por posición antes de medir
   await loaderDone;
   (window as unknown as { __appReady: boolean }).__appReady = true;
   root.classList.remove('is-loading');
