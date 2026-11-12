@@ -8,7 +8,8 @@ import { gsap } from 'gsap';
 const GLYPHS = '01{}<>/;=#&%+*';
 const MESSAGES = ['Leyendo datos', 'Llamando a la API', 'Automatizando', 'Aplicando IA', 'Listo'];
 const THRESHOLDS = [0.14, 0.42, 0.7, 0.97];
-const MIN_MS = 4400;
+const MIN_DESKTOP = 4400;
+const MIN_SMALL = 3400; // en móvil la espera es algo más corta
 const MAX_MS = 9000;
 
 export function runLoader(): Promise<void> {
@@ -25,6 +26,9 @@ export function runLoader(): Promise<void> {
     const pctEl = loader.querySelector<HTMLElement>('#ld-pct')!;
     const msgEl = loader.querySelector<HTMLElement>('#ld-msg')!;
     const wipe = loader.querySelector<HTMLElement>('#ld-wipe')!;
+    const curtain = loader.querySelector<HTMLElement>('#ld-curtain')!;
+    const small = matchMedia('(max-width: 700px)').matches;
+    const minMs = small ? MIN_SMALL : MIN_DESKTOP;
     const nodes = Array.from(loader.querySelectorAll<HTMLElement>('.ld-node'));
     const inner = loader.querySelector<HTMLElement>('.ld-inner')!;
 
@@ -85,7 +89,7 @@ export function runLoader(): Promise<void> {
     const render = (now: number) => {
       if (done) return;
       const elapsed = now - start;
-      const t = Math.min(1, elapsed / MIN_MS);
+      const t = Math.min(1, elapsed / minMs);
       const eased = 1 - Math.pow(1 - t, 2.4);
       const target = ready ? eased : Math.min(eased, 0.9);
       shown = Math.max(shown, target);
@@ -125,16 +129,19 @@ export function runLoader(): Promise<void> {
 
     /* ---- salida: círculo naranja que cubre y se levanta ---- */
     const close = () => {
-      gsap.timeline({ delay: 1 }) // pausa con el nombre ya completo para poder leerlo
+      // Todo con transform (se anima en la GPU): círculo que crece y cortina que sube
+      gsap.timeline({ delay: small ? 0.7 : 1 }) // pausa con el nombre ya completo para poder leerlo
         .to(inner, { scale: 1.04, duration: 0.5, ease: 'power2.in' }, 0)
-        .to(wipe, { clipPath: 'circle(150% at 50% 50%)', duration: 1.1, ease: 'power3.inOut' }, 0)
+        .to(wipe, { scale: 1, duration: 1.1, ease: 'power3.inOut' }, 0)
         .add(() => {
           packets.forEach((p) => gsap.killTweensOf(p));
           inner.style.visibility = 'hidden';
           loader.style.background = 'transparent';
+          wipe.style.visibility = 'hidden';
+          gsap.set(curtain, { visibility: 'visible', yPercent: 0 });
           resolve(); // main quita is-loading y arranca la intro mientras sube la cortina
         })
-        .to(wipe, { yPercent: -100, duration: 1.2, ease: 'power4.inOut' }, '+=0.1')
+        .to(curtain, { yPercent: -100, duration: 1.2, ease: 'power4.inOut' }, '+=0.1')
         .add(() => loader.remove());
     };
 

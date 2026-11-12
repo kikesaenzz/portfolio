@@ -14,7 +14,8 @@ export function initTheme() {
   btn.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
-    if (!doc.startViewTransition || reduce) { apply(next); return; }
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!doc.startViewTransition || reduce || !fine) { apply(next); return; } // en táctil, cambio directo y sin coste
 
     const r = btn.getBoundingClientRect();
     const x = r.left + r.width / 2;

@@ -61,6 +61,8 @@ export function initPrism(plane: HTMLElement | null, opts: { idle: boolean }) {
     plane.appendChild(cell);
   };
 
+  if (matchMedia('(pointer: coarse)').matches) return; // en táctil la rejilla queda fija: más fluido y sin consumo
+
   hero.addEventListener('pointermove', (e: PointerEvent) => {
     lastMove = performance.now();
     const r = host.getBoundingClientRect();

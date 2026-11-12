@@ -11,6 +11,8 @@ import { initTheme } from './theme';
 import { initPrism } from './prism';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+// En móvil la barra del navegador aparece y desaparece al deslizar: no recalcular en cada cambio
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -43,10 +45,11 @@ const openBtn = $('#index-open')!;
 const closeBtn = $('#index-close')!;
 let indexOpen = false;
 
+gsap.set(indexEl, { yPercent: -100 });
 const indexTl = gsap.timeline({ paused: true, onReverseComplete: () => { indexEl.style.visibility = 'hidden'; } });
 indexTl
   .set(indexEl, { visibility: 'visible' })
-  .fromTo(indexEl, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power4.inOut' })
+  .fromTo(indexEl, { yPercent: -100 }, { yPercent: 0, duration: 0.8, ease: 'power4.inOut' })
   .from('#index li', { yPercent: 60, autoAlpha: 0, stagger: 0.05, duration: 0.7, ease: 'power3.out' }, '-=0.4');
 
 function openIndex() {
@@ -139,7 +142,9 @@ function buildAnimations() {
     setActive(idx);
     if (fill) gsap.set(fill, { scaleY: Math.min(1, idx >= ids.length - 1 ? 1 : (idx + prog) / (ids.length - 1)) });
   };
-  const queueRail = () => { if (!railQueued) { railQueued = true; requestAnimationFrame(updateRail); } };
+  // El hilo solo existe en pantallas anchas: en móvil no se calcula nada al deslizar
+  const railMq = matchMedia('(min-width: 1100px)');
+  const queueRail = () => { if (railMq.matches && !railQueued) { railQueued = true; requestAnimationFrame(updateRail); } };
   addEventListener('scroll', queueRail, { passive: true });
   addEventListener('resize', queueRail);
   ScrollTrigger.addEventListener('refresh', queueRail);
@@ -204,15 +209,6 @@ function buildAnimations() {
       gsap.to(g.querySelectorAll('.chip'), { autoAlpha: 1, scale: 1, y: 0, duration: 0.6, stagger: 0.045, delay: i * 0.1, ease: 'back.out(1.7)' })),
   });
 
-  // Capturas de proyectos con parallax suave
-  $$('.work').forEach((w, i, all) => {
-    const img = w.querySelector('img');
-    if (img) gsap.fromTo(img, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: w, start: 'top bottom', end: 'bottom top', scrub: true } });
-    if (i < all.length - 1) {
-      gsap.to(w, { scale: 0.94, ease: 'none', scrollTrigger: { trigger: all[i + 1], start: 'top 85%', end: 'top 18%', scrub: true } });
-    }
-  });
-
   /* ---- escenas fijadas (solo escritorio con altura suficiente) ---- */
   const mm = gsap.matchMedia();
   mm.add('(min-width: 900px) and (min-height: 760px)', () => {
@@ -258,6 +254,16 @@ function buildAnimations() {
     }
     return () => { $('.cap')?.classList.remove('static'); $('.casos')?.classList.remove('static'); };
   });
+  // Proyectos propios: tarjetas apiladas y parallax solo en pantallas anchas (en móvil, lista simple)
+  mm.add('(min-width: 900px)', () => {
+    $$('.work').forEach((w, i, all) => {
+      const img = w.querySelector('img');
+      if (img) gsap.fromTo(img, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: w, start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (i < all.length - 1) {
+        gsap.to(w, { scale: 0.94, ease: 'none', scrollTrigger: { trigger: all[i + 1], start: 'top 85%', end: 'top 18%', scrub: true } });
+      }
+    });
+  });
   mm.add('(max-width: 899px), (max-height: 759px)', () => {
     $('.cap')?.classList.add('static');
     $('.casos')?.classList.add('static');
@@ -297,7 +303,8 @@ function playHero() {
 /* ------------------------------------------------------------------- arranque */
 async function boot() {
   const loaderDone = runLoader();
-  try { await document.fonts.ready; } catch { /* continuar */ }
+  // No esperar a las fuentes más de 2,5 s: con una red lenta la página debe animarse igualmente
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]); } catch { /* continuar */ }
   prepareHero();
   buildAnimations();
   ScrollTrigger.sort(); // las escenas fijadas se crean después: reordenar por posición antes de medir
