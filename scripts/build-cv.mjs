@@ -1,6 +1,6 @@
 // Genera el CV en Word a partir de src/data/profile.ts (la misma fuente que la web).
 // Uso: npm run cv   (genera el .docx y luego el PDF con Word)
-import { writeFileSync, copyFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import {
   Document, Packer, Paragraph, TextRun, ExternalHyperlink, Table, TableRow, TableCell,
   WidthType, BorderStyle, LevelFormat, AlignmentType,
@@ -125,5 +125,4 @@ const doc = new Document({
 
 const buf = await Packer.toBuffer(doc);
 writeFileSync('CV_Enrique_Saenz_de_Urturi.docx', buf);
-copyFileSync('CV_Enrique_Saenz_de_Urturi.docx', 'public/CV-Enrique-Saenz-de-Urturi.docx');
 console.log('CV .docx generado');

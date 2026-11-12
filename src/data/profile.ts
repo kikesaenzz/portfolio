@@ -11,7 +11,6 @@ export const profile = {
   city: 'Zaragoza, España',
   web: 'enrique-saenz.vercel.app',
   cvPdf: '/CV-Enrique-Saenz-de-Urturi.pdf',
-  cvDocx: '/CV-Enrique-Saenz-de-Urturi.docx',
 };
 
 // Texto de "Acerca de mí" (CV) y frase de perfil (web)
