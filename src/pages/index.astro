@@ -1,467 +1,254 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { profile, summary, sections, facts, capabilities, jobs, cases, works, stack, education } from '../data/profile';
 ---
-<Layout title="Enrique Sáenz de Urturi — Backend Developer" description="Enrique Sáenz de Urturi — Backend Developer en Zaragoza. PHP, Laravel y Python, APIs REST, bases de datos e integración de sistemas, con automatización y testing como diferenciador.">
-  <div class="scroll-progress" aria-hidden="true"></div>
-  <header>
-    <nav class="wrap">
-      <div class="brand">Enrique<b>.</b></div>
-      <div class="navbar-right">
-        <div class="navlinks" id="navlinks">
-          <a href="#sobre-mi">Sobre mí</a>
-          <a href="#experiencia">Experiencia</a>
-          <a href="#proyectos">Proyectos</a>
-          <a href="#skills">Skills</a>
-          <a href="#contacto">Contacto</a>
-          <a href="/CV-Enrique-Saenz-de-Urturi.pdf" download>CV</a>
+<Layout title="Enrique Sáenz de Urturi · Desarrollador backend en la Administración Pública">
+  <div class="progress" aria-hidden="true"></div>
+
+  <a class="brandmark" href="#perfil" data-nav>
+    <span class="sq" aria-hidden="true"></span>
+    <span><b>{profile.name}</b><small>Zaragoza · disponible</small></span>
+  </a>
+
+  <div class="tools">
+    <button class="pill" id="index-open" aria-haspopup="dialog" aria-controls="index">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="0" y="1" width="14" height="2" rx="1"/><rect x="0" y="6" width="10" height="2" rx="1"/><rect x="0" y="11" width="6" height="2" rx="1"/></svg>
+      Índice
+    </button>
+    <a class="pill txt-cv" href={profile.cvPdf} download>CV <span aria-hidden="true">↓</span></a>
+    <button class="pill icon" id="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+  </div>
+
+  <!-- Hilo de flujo: dónde estás y qué viene -->
+  <nav class="rail" aria-label="Secciones">
+    <div class="rail-track"><i class="rail-fill"></i></div>
+    <ol>
+      {sections.map((s) => (
+        <li data-for={s.id}><a href={`#${s.id}`} data-nav><span class="nd"></span><span class="tx">{s.n} {s.label}</span></a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <!-- Índice a pantalla completa -->
+  <div class="index" id="index" role="dialog" aria-modal="true" aria-label="Índice del portfolio">
+    <div class="index-inner">
+      <div class="index-top"><span>Índice · de mayor a menor importancia</span><button class="pill" id="index-close">Cerrar <span aria-hidden="true">✕</span></button></div>
+      <ol>
+        {sections.map((s) => (
+          <li><a href={`#${s.id}`} data-nav data-close><span class="n">{s.n}</span><span class="t">{s.label}</span><span class="b">{s.blurb}</span></a></li>
+        ))}
+      </ol>
+    </div>
+  </div>
+
+  <main>
+    <!-- 01 PERFIL -->
+    <section id="perfil" class="perfil" style="padding:0">
+      <div class="hero">
+        <div class="prism" aria-hidden="true"><div class="prism-plane" id="prism"></div></div>
+        <div class="wrap">
+          <p class="eyebrow" data-intro><span class="pulse" aria-hidden="true"></span>Desarrollador backend · Zaragoza</p>
+          <h1 class="h1" id="hero-title">
+            <span class="ln">Backend <em>Java y PHP</em>,</span>
+            <span class="ln">trámites <em>automatizados</em>,</span>
+            <span class="ln"><em>Administración Pública</em>.</span>
+          </h1>
+          <p class="hero-sub" data-intro>Soy <strong>{profile.name}</strong>. Desarrollo y mantengo aplicaciones para ministerios y otras administraciones con Java, Spring Boot y PHP, y automatizo trámites con Python, Power Platform y Azure.</p>
+          <div class="cta-row" data-intro>
+            <a class="btn primary magnetic" href="#hacer" data-nav>Ver mi trabajo</a>
+            <a class="btn ghost magnetic" href={profile.cvPdf} download>Descargar CV</a>
+            <a class="btn ghost magnetic" href={`mailto:${profile.email}`}>Escribirme</a>
+          </div>
+          <dl class="facts" data-intro>
+            {facts.map((f) => (
+              <div><dt>{f.k}</dt><dd>{f.v}<small>{f.s}</small></dd></div>
+            ))}
+          </dl>
         </div>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar entre modo claro y oscuro">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"></path></svg>
-        </button>
-        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <main class="wrap">
-
-    <section class="hero">
-      <canvas class="hero-particles" aria-hidden="true"></canvas>
-      <div class="blob b1" aria-hidden="true"></div>
-      <div class="blob b2" aria-hidden="true"></div>
-
-      <div class="wrap hero-inner">
-        <div class="avatar-badge" aria-hidden="true">E</div>
-
-        <div class="eyebrow">Backend Developer · Zaragoza, España</div>
-        <h1>
-          <span class="line-wrap"><span class="line">Hola, soy Enrique.</span></span>
-          <span class="line-wrap"><span class="line">Construyo el</span></span>
-          <span class="line-wrap"><span class="line hero-giant">backend</span></span>
-        </h1>
-        <p class="lede">Desarrollo backend con PHP y Laravel: APIs REST, bases de datos e integración de sistemas para clientes de distintos sectores. Amplío este perfil con Python, y lo complemento con automatización de procesos y testing (Selenium, RPA), lo que me da una visión completa de lo que construyo, no solo de cómo probarlo.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#proyectos">Ver proyectos</a>
-          <a class="btn ghost" href="/CV-Enrique-Saenz-de-Urturi.pdf" download>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>
-            Descargar CV
-          </a>
-          <a class="btn ghost" href="mailto:kikesaenzz@gmail.com">Escríbeme</a>
-        </div>
-      </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <section id="sobre-mi" class="about reveal">
-      <p class="kicker">Sobre mí</p>
-      <h2>Un poco de contexto</h2>
-      <p>Soy desarrollador <strong>backend con PHP y Laravel</strong>, construyendo APIs REST, integraciones de sistemas y bases de datos para clientes de distintos sectores: desde plataformas de gestión de vídeo hasta pipelines de datos a gran escala. Estoy ampliando este perfil hacia Python, y lo complemento con automatización de procesos y testing (Selenium, RPA), lo que me da una visión completa de todo el ciclo, no solo de la parte que construyo.</p>
-      <p>Fuera del código me gusta mantenerme activo, viajar y escuchar música, y eso se nota en cómo trabajo: prefiero el progreso constante y bien medido a los atajos que luego hay que rehacer.</p>
-    </section>
-
-    <hr class="section-divider" />
-
-    <section id="experiencia" class="reveal">
-      <p class="kicker">Trayectoria</p>
-      <h2>Experiencia</h2>
-
-      <div class="job item-reveal">
-        <div class="job-meta">Ene 2025 — Actualidad</div>
-        <div>
-          <p class="job-role">Desarrollador Backend</p>
-          <p class="job-org">Memorándum Tecnología</p>
-          <ul>
-            <li>Desarrollo backend con PHP/Laravel: APIs REST e integración de sistemas de vídeo (Kaltura), con gestión de tareas programadas y procesamiento de lotes a gran escala.</li>
-            <li>Desarrollo backend en una plataforma de gestión de subvenciones, con arquitectura multi-servicio y flujo de trabajo por tickets.</li>
-            <li>Desarrollo y mantenimiento del pipeline de datos enlazados "Marimba" (MARC21→RDF) para la Biblioteca Nacional de España, con Node.js, MongoDB y ElasticSearch.</li>
-            <li>Automatización de procesos con Python y RPA (Ranorex), y diseño de pruebas automatizadas con Selenium en entornos de QA.</li>
-            <li>Desarrollo y mantenimiento de sitios web para clientes de diversos sectores, con WordPress, PHP, HTML5, CSS3, JavaScript y MySQL.</li>
-          </ul>
-        </div>
+        <div class="scroll-cue" aria-hidden="true"><i></i>Desliza</div>
       </div>
 
-      <div class="job item-reveal">
-        <div class="job-meta">Mar 2024 — Jun 2024</div>
-        <div>
-          <p class="job-role">QA Tester (prácticas)</p>
-          <p class="job-org">Entertainment Solutions</p>
-          <ul>
-            <li>Ejecución de pruebas manuales y automatizadas con Selenium y JavaScript, automatizando casos de prueba para reducir el tiempo de validación de nuevas versiones.</li>
-            <li>Registro de incidencias mediante GitLab y colaboración con el equipo de desarrollo para garantizar la calidad del software.</li>
-          </ul>
+      <div class="statement-sec">
+        <div class="wrap">
+          <p class="kicker"><b>01</b> Perfil</p>
+          <p class="statement" id="statement">{summary}</p>
         </div>
       </div>
     </section>
 
-    <hr class="section-divider" />
-
-    <section id="proyectos" class="reveal">
-      <p class="kicker">Casos de estudio</p>
-      <h2>Proyectos</h2>
-      <div class="grid-projects">
-
-        <div class="card item-reveal">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M8 21h8M12 18v3"></path></svg>
+    <!-- 02 QUÉ HAGO -->
+    <section id="hacer" class="cap">
+      <div class="cap-pin">
+        <div class="wrap cap-grid">
+          <div>
+            <p class="kicker"><b>02</b> Qué hago</p>
+            <h2 data-split>Cuatro áreas, de más a menos peso.</h2>
+            <ol class="cap-list">
+              {capabilities.map((c, i) => (
+                <li><button class={`cap-item${i === 0 ? ' is-active' : ''}`} data-i={i}><span class="n">0{i + 1}</span>{c.t}</button></li>
+              ))}
+            </ol>
           </div>
-          <div class="tag">Backend & Integración</div>
-          <h3>Sistema de gestión e ingesta de vídeo</h3>
-          <p>Desarrollo backend en PHP/Laravel para un sistema de integración de vídeo (Kaltura), con tareas programadas y procesamiento de lotes de miles de elementos en producción.</p>
-          <div class="stack">
-            <span class="chip">PHP</span>
-            <span class="chip">Laravel</span>
-            <span class="chip">APIs REST</span>
-          </div>
-        </div>
-
-        <div class="card item-reveal">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="2.4"></circle><circle cx="19" cy="6" r="2.4"></circle><circle cx="19" cy="18" r="2.4"></circle><path d="M7.2 11.2 16.8 6.9M7.2 12.8 16.8 17.1"></path></svg>
-          </div>
-          <div class="tag">Datos & Infraestructura</div>
-          <h3>Plataforma de datos enlazados — sector cultural</h3>
-          <p>Mantenimiento del pipeline "Marimba", que transforma registros bibliográficos (MARC21→RDF) en datos enlazados públicos, y diagnóstico de incidencias en la indexación de un catálogo de millones de registros.</p>
-          <div class="stack">
-            <span class="chip">MongoDB</span>
-            <span class="chip">ElasticSearch</span>
-            <span class="chip">Node.js</span>
-          </div>
-        </div>
-
-        <div class="card item-reveal">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a8 8 0 1 1-5.66 2.34"></path><path d="M6.34 3.34 6.34 8 11 8"></path></svg>
-          </div>
-          <div class="tag">Automatización</div>
-          <h3>RPA para procesos de cliente</h3>
-          <p>Robots de automatización (Ranorex, Python) que sustituyen procesos manuales de tramitación y validación para distintos clientes, reduciendo el trabajo repetitivo del equipo.</p>
-          <div class="stack">
-            <span class="chip">Ranorex</span>
-            <span class="chip">Python</span>
-            <span class="chip">APIs REST</span>
-          </div>
-        </div>
-
-        <div class="card item-reveal">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M8.5 12.5 11 15 15.5 9"></path></svg>
-          </div>
-          <div class="tag">Calidad de software</div>
-          <h3>Suites de testing automatizado</h3>
-          <p>Diseño y mantenimiento de baterías de pruebas automatizadas para validar funcionalidades antes de cada despliegue, integradas con el flujo de trabajo del equipo de QA.</p>
-          <div class="stack">
-            <span class="chip">Selenium</span>
-            <span class="chip">JavaScript</span>
-            <span class="chip">GitLab</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <section id="skills" class="reveal">
-      <p class="kicker">Caja de herramientas</p>
-      <h2>Skills</h2>
-      <p class="lede" style="font-size:15px; margin-bottom:0;">Arrástralas si quieres desordenarlas: vuelven a acomodarse solas.</p>
-      <div class="skills-grid">
-        <div class="skill-group item-reveal">
-          <h4>Backend & Frameworks</h4>
-          <div class="skill-tags">
-            <span data-tag>PHP</span><span data-tag>Laravel</span><span data-tag>Python</span><span data-tag>Node.js</span><span data-tag>APIs REST</span>
-          </div>
-        </div>
-        <div class="skill-group item-reveal">
-          <h4>Bases de datos & Cloud</h4>
-          <div class="skill-tags">
-            <span data-tag>SQL</span><span data-tag>MySQL</span><span data-tag>MongoDB</span><span data-tag>ElasticSearch</span><span data-tag>Docker</span><span data-tag>Azure (en formación)</span>
-          </div>
-        </div>
-        <div class="skill-group item-reveal">
-          <h4>Automatización & Testing</h4>
-          <div class="skill-tags">
-            <span data-tag>Selenium</span><span data-tag>Ranorex</span><span data-tag>Git / GitLab</span>
-          </div>
-        </div>
-        <div class="skill-group item-reveal">
-          <h4>Complementario</h4>
-          <div class="skill-tags">
-            <span data-tag>JavaScript</span><span data-tag>C#</span><span data-tag>WordPress</span><span data-tag>Elementor</span>
+          <div class="cap-panels">
+            <div class="cap-bar" aria-hidden="true"><i></i></div>
+            {capabilities.map((c, i) => (
+              <article class="cap-panel" data-i={i}>
+                <p class="num">Área 0{i + 1} de 0{capabilities.length}</p>
+                <h3>{c.t}</h3>
+                <p>{c.d}</p>
+                <ul class="chips">{c.chips.map((x) => <li class="chip">{x}</li>)}</ul>
+                <h4>Dónde lo he hecho</h4>
+                <ul class="seen">{c.seen.map((x) => <li>{x}</li>)}</ul>
+              </article>
+            ))}
           </div>
         </div>
       </div>
     </section>
 
-    <hr class="section-divider" />
-
-    <section id="contacto" class="reveal" style="padding-bottom: 80px;">
-      <p class="kicker">Contacto</p>
-      <h2>Hablemos</h2>
-      <div class="contact-card">
-        <p class="lede" style="margin-bottom:0;">¿Buscas a alguien para tu equipo de backend, datos o automatización? Escríbeme, respondo rápido.</p>
-        <div class="contact-list">
-          <a href="mailto:kikesaenzz@gmail.com">kikesaenzz@gmail.com</a>
-          <a href="tel:+34644219817">+34 644 21 98 17</a>
-          <span style="color:var(--ink-soft); font-weight:500;">Zaragoza, España</span>
+    <!-- 03 EXPERIENCIA -->
+    <section id="experiencia">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker"><b>03</b> Experiencia</p>
+          <h2 data-split>Dónde he trabajado.</h2>
+        </div>
+        <div class="jobs">
+          {jobs.map((j) => (
+            <article class="job" data-fade>
+              <div class="job-meta">{j.period}{j.current && <><br /><span class="now">En activo</span></>}</div>
+              <div>
+                <h3>{j.role}</h3>
+                <p class="org">{j.org}</p>
+                {j.intro && <p class="in">{j.intro}</p>}
+                <ul>{j.bullets.map((b) => <li>{b}</li>)}</ul>
+                {j.tech.length > 0 && (<><h4>{j.techTitle}</h4><ul>{j.tech.map((t) => <li>{t}</li>)}</ul></>)}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
 
+    <!-- 04 CASOS -->
+    <section id="casos" class="casos">
+      <div class="casos-pin">
+        <div class="wrap sec-head" style="width:100%">
+          <p class="kicker"><b>04</b> Casos</p>
+          <h2 data-split>Proyectos para ministerios y clientes.</h2>
+          <p class="casos-hint">Sigue deslizando para recorrerlos</p>
+        </div>
+        <div class="casos-track">
+          {cases.map((c, i) => (
+            <article class={`case${i === 0 ? ' first' : ''}`}>
+              <p class="client">{c.client} · {c.period}</p>
+              <h3>{c.title}</h3>
+              <p class="role">{c.role}</p>
+              <ul class="bl">{c.bullets.map((b) => <li>{b}</li>)}</ul>
+              <ul class="chips">{c.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+        <div class="wrap" style="width:100%"><div class="casos-bar" aria-hidden="true"><i></i></div></div>
+      </div>
+    </section>
+
+    <!-- 05 PROYECTOS PROPIOS -->
+    <section id="proyectos">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker"><b>05</b> Proyectos propios</p>
+          <h2 data-split>Webs que siguen en línea.</h2>
+          <p class="lead" data-fade>Integración de servicios, datos y automatización aplicados a casos reales, del formulario al despliegue.</p>
+        </div>
+        <div class="works">
+          {works.map((w, i) => (
+            <article class="work" style={`--i:${i}`}>
+              <div class="work-media"><img src={w.img} alt={w.alt} width="1000" height="625" loading="lazy" decoding="async" /></div>
+              <div class="work-body">
+                <p class="tag">{w.tag}</p>
+                <h3>{w.title}</h3>
+                <p class="desc">{w.desc}</p>
+                <ul class="chips">{w.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+                <div class="links">
+                  <a class="link solid" href={w.live} target="_blank" rel="noopener noreferrer">Ver en vivo <span aria-hidden="true">↗</span></a>
+                  {w.repo && <a class="link" href={w.repo} target="_blank" rel="noopener noreferrer">Código en GitHub</a>}
+                </div>
+                {w.note && <p class="note">{w.note}</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 STACK -->
+    <section id="stack">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker"><b>06</b> Stack</p>
+          <h2 data-split>Con qué trabajo.</h2>
+        </div>
+        <div class="stack-grid">
+          {stack.map((g) => (
+            <div class="stack-g">
+              <h3>{g.t}</h3>
+              <ul class="chips">{g.c.map((c) => <li class="chip">{c}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 FORMACIÓN -->
+    <section id="formacion">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker"><b>07</b> Formación</p>
+          <h2 data-split>Lo que he estudiado.</h2>
+        </div>
+        <div class="edu">
+          <div data-fade>
+            <h3>Titulación académica</h3>
+            {education.degrees.map((d) => (
+              <div class="edu-i"><p class="t">{d.t}</p><p class="s">{d.s}<b>{d.d}</b></p></div>
+            ))}
+          </div>
+          <div data-fade>
+            <h3>Formación complementaria</h3>
+            {education.courses.map((d) => (
+              <div class="edu-i"><p class="t">{d.t}</p><p class="s">{d.s}{d.d && <b>{d.d}</b>}</p></div>
+            ))}
+            <div class="edu-i"><p class="t">Certificación de Microsoft Azure</p><span class="live">{education.inProgress}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 CONTACTO -->
+    <section id="contacto" class="contact">
+      <div class="wrap">
+        <p class="kicker"><b>08</b> Contacto</p>
+        <h2 data-split>Hablemos.</h2>
+        <a class="mail" id="mail" href={`mailto:${profile.email}`} data-fade>{profile.email}</a>
+        <div class="contact-row" data-fade>
+          <button class="btn primary magnetic" id="copy-mail" type="button">Copiar email</button>
+          <a class="btn ghost magnetic" href={profile.cvPdf} download>Descargar CV en PDF</a>
+          <a class="btn ghost magnetic" href={profile.cvDocx} download>CV en Word</a>
+        </div>
+        <div class="contact-meta" data-fade>
+          <div><small>Teléfono</small><a href={profile.phoneHref}>{profile.phone}</a></div>
+          <div><small>Ubicación</small>{profile.city}</div>
+          <div><small>Disponibilidad</small>Total, con carné de conducir</div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="wrap">
-    <span>Enrique Sáenz de Urturi — © 2026</span>
-    <span>Diseñado y construido con Astro.</span>
+  <footer>
+    <div class="wrap"><span>{profile.name} · © 2026</span><span>Hecho con Astro y GSAP</span></div>
   </footer>
-
-  <script is:inline>
-  (function () {
-    if (window.__setFullBleed) window.__setFullBleed();
-    window.addEventListener('load', function () { if (window.__setFullBleed) window.__setFullBleed(); });
-
-    // Reveal on scroll
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-
-    // Once the giant hero word's line-up entrance finishes, release the
-    // animation (and pin it at its resting position) so the scroll-driven
-    // GSAP parallax can take over its transform. The other two lines keep
-    // their animation as-is (forwards fill already holds them visible).
-    var giant = document.querySelector('.hero-giant');
-    if (giant) {
-      giant.addEventListener('animationend', function () {
-        giant.style.animation = 'none';
-        giant.style.transform = 'translateY(0)';
-      }, { once: true });
-    }
-
-    // Scroll progress bar
-    var progressBar = document.querySelector('.scroll-progress');
-    if (progressBar) {
-      window.addEventListener('scroll', function () {
-        var h = document.documentElement;
-        var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-        progressBar.style.width = scrolled + '%';
-      });
-    }
-
-
-    // Hero particle field: lightweight canvas 2D, no WebGL
-    (function () {
-      var canvas = document.querySelector('.hero-particles');
-      var hero = document.querySelector('.hero');
-      if (!canvas || !hero) return;
-      var ctx = canvas.getContext('2d');
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-
-      var particles = [];
-      var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var pointer = { x: -9999, y: -9999 };
-      var running = false;
-      var rafId = null;
-
-      function colors() {
-        var s = getComputedStyle(document.documentElement);
-        return [s.getPropertyValue('--accent').trim(), s.getPropertyValue('--accent-2').trim(), s.getPropertyValue('--ink-soft').trim()];
-      }
-
-      function resize() {
-        var r = hero.getBoundingClientRect();
-        W = r.width; H = r.height;
-        canvas.width = W * dpr; canvas.height = H * dpr;
-        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        var count = Math.min(60, Math.round((W * H) / 18000));
-        var pal = colors();
-        particles = Array.from({ length: count }, function () {
-          return {
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: 1 + Math.random() * 1.8,
-            vx: (Math.random() - 0.5) * 0.15,
-            vy: (Math.random() - 0.5) * 0.15,
-            c: pal[Math.floor(Math.random() * pal.length)],
-            a: 0.25 + Math.random() * 0.35,
-          };
-        });
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        particles.forEach(function (p) {
-          var dx = p.x - pointer.x, dy = p.y - pointer.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 110) {
-            var force = (110 - dist) / 110;
-            p.x += (dx / (dist || 1)) * force * 1.6;
-            p.y += (dy / (dist || 1)) * force * 1.6;
-          }
-          p.x += p.vx; p.y += p.vy;
-          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = p.c;
-          ctx.globalAlpha = p.a;
-          ctx.fill();
-        });
-        ctx.globalAlpha = 1;
-      }
-
-      function loop() {
-        if (!running) return;
-        draw();
-        rafId = requestAnimationFrame(loop);
-      }
-
-      function start() { if (running) return; running = true; loop(); }
-      function stop() { running = false; if (rafId) cancelAnimationFrame(rafId); }
-
-      resize();
-      window.addEventListener('resize', resize);
-
-      if (reduce) {
-        draw();
-      } else {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
-        }, { threshold: 0.05 });
-        io.observe(hero);
-
-        if (!isTouch) {
-          hero.addEventListener('mousemove', function (e) {
-            var r = hero.getBoundingClientRect();
-            pointer.x = e.clientX - r.left;
-            pointer.y = e.clientY - r.top;
-          });
-          hero.addEventListener('mouseleave', function () { pointer.x = -9999; pointer.y = -9999; });
-        } else {
-          hero.addEventListener('touchmove', function (e) {
-            if (!e.touches || !e.touches[0]) return;
-            var r = hero.getBoundingClientRect();
-            pointer.x = e.touches[0].clientX - r.left;
-            pointer.y = e.touches[0].clientY - r.top;
-          }, { passive: true });
-          hero.addEventListener('touchend', function () { pointer.x = -9999; pointer.y = -9999; });
-        }
-      }
-    })();
-
-    // Mobile menu
-    var menuBtn = document.getElementById('menu-toggle');
-    var navlinks = document.getElementById('navlinks');
-    if (menuBtn && navlinks) {
-      menuBtn.addEventListener('click', function () { navlinks.classList.toggle('open'); });
-      navlinks.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { navlinks.classList.remove('open'); }); });
-    }
-
-    // Skills: idle float + drag with settle
-    (function () {
-      var tags = document.querySelectorAll('[data-tag]');
-      if (!tags.length) return;
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      tags.forEach(function (tag, i) {
-        var rot = (Math.sin(i * 12.9898) * 43758.5453 % 1) * 10 - 5;
-        var phase = i * 0.7;
-        var ampX = 2 + (i % 3);
-        var ampY = 3 + (i % 4);
-        var dragX = 0, dragY = 0, baseRotate = rot;
-        var dragging = false, startX = 0, startY = 0, originX = 0, originY = 0;
-        var settleTo = { x: 0, y: 0 };
-        var settling = false;
-        var t = phase;
-
-        tag.style.transformOrigin = '50% 50%';
-
-        function render(idleX, idleY) {
-          tag.style.transform = 'translate(' + (dragX + idleX) + 'px, ' + (dragY + idleY) + 'px) rotate(' + baseRotate + 'deg)';
-        }
-
-        if (!reduce) {
-          function loop() {
-            t += 0.007;
-            var idleX = dragging ? 0 : Math.sin(t + phase) * ampX;
-            var idleY = dragging ? 0 : Math.cos(t * 1.3 + phase) * ampY;
-            if (settling) {
-              dragX += (settleTo.x - dragX) * 0.08;
-              dragY += (settleTo.y - dragY) * 0.08;
-              if (Math.abs(dragX - settleTo.x) < 0.3 && Math.abs(dragY - settleTo.y) < 0.3) settling = false;
-            }
-            render(idleX, idleY);
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
-
-        tag.addEventListener('pointerdown', function (e) {
-          dragging = true; settling = false;
-          tag.classList.add('dragging');
-          tag.setPointerCapture(e.pointerId);
-          startX = e.clientX; startY = e.clientY;
-          originX = dragX; originY = dragY;
-        });
-        tag.addEventListener('pointermove', function (e) {
-          if (!dragging) return;
-          dragX = originX + (e.clientX - startX);
-          dragY = originY + (e.clientY - startY);
-          baseRotate = rot + (e.clientX - startX) * 0.05;
-        });
-        function release() {
-          if (!dragging) return;
-          dragging = false;
-          tag.classList.remove('dragging');
-          settleTo = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 };
-          settling = true;
-          baseRotate = rot;
-        }
-        tag.addEventListener('pointerup', release);
-        tag.addEventListener('pointercancel', release);
-      });
-    })();
-  })();
-  </script>
-
-  <script>
-    import { gsap } from 'gsap';
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    gsap.registerPlugin(ScrollTrigger);
-
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Staggered per-item reveals: jobs, project cards, skill groups each
-    // appear on their own beat as you scroll to them, instead of all at once.
-    if (reduce) {
-      document.querySelectorAll('.item-reveal').forEach(function (el) { el.classList.add('visible'); });
-    } else {
-      ScrollTrigger.batch('.item-reveal', {
-        start: 'top 88%',
-        once: true,
-        onEnter: function (batch) {
-          batch.forEach(function (el, i) {
-            setTimeout(function () { el.classList.add('visible'); }, i * 90);
-          });
-        },
-      });
-
-      // Hero: giant word, blobs and eyebrow drift at different speeds as
-      // you scroll past — a cheap, GPU-friendly stand-in for the WebGL
-      // "morph on scroll" feeling, without the WebGL.
-      gsap.timeline({
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
-      })
-        .to('.hero-giant', { yPercent: -30, scale: 0.94, opacity: 0.35, ease: 'none' }, 0)
-        .to('.blob.b1', { y: -70, x: 24, ease: 'none' }, 0)
-        .to('.blob.b2', { y: 50, x: -18, ease: 'none' }, 0)
-        .to('.eyebrow', { y: -18, opacity: 0.35, ease: 'none' }, 0);
-    }
-  </script>
 </Layout>

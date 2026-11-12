@@ -1,118 +1,77 @@
 ---
 import '../styles/global.css';
+
 interface Props { title: string; description?: string; }
-const { title, description = "Enrique Sáenz de Urturi — desarrollador de software en Zaragoza. Datos, automatización y calidad, contadas cerca." } = Astro.props;
+const {
+  title,
+  description = 'Enrique Sáenz de Urturi, desarrollador de software en Zaragoza. Backend con PHP y Laravel, datos con Node.js, automatización con Python e IA aplicada con Power Platform y Azure.',
+} = Astro.props;
 ---
 <!doctype html>
-<html lang="es">
+<html lang="es" class="is-loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Tema antes del primer pintado: claro por defecto, oscuro si lo eligió -->
     <script is:inline>
       (function () {
-        var THEMES = {
-          light: { bg:'#FBF3E9', bgAlt:'#F3E1C8', ink:'#2B1D14', inkSoft:'#6E5A48', line:'#E7D3B4', accent:'#C6602E', accent2:'#B98A2E', accentSoft:'#F3DCC0', paper:'#FFFCF7' },
-          dark:  { bg:'#20160F', bgAlt:'#2A1D14', ink:'#F6E9D8', inkSoft:'#C7AC90', line:'#3C2B1E', accent:'#E58A54', accent2:'#E4BB6B', accentSoft:'#3C291B', paper:'#271A11' }
-        };
-        window.__applyTheme = function (name) {
-          var t = THEMES[name] || THEMES.light;
-          var s = document.documentElement.style;
-          s.setProperty('--bg', t.bg);
-          s.setProperty('--bg-alt', t.bgAlt);
-          s.setProperty('--ink', t.ink);
-          s.setProperty('--ink-soft', t.inkSoft);
-          s.setProperty('--line', t.line);
-          s.setProperty('--accent', t.accent);
-          s.setProperty('--accent-2', t.accent2);
-          s.setProperty('--accent-soft', t.accentSoft);
-          s.setProperty('--paper', t.paper);
-          document.documentElement.setAttribute('data-theme', name);
-        };
-        var stored = null;
-        try { stored = localStorage.getItem('theme'); } catch (e) {}
-        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        window.__applyTheme(theme);
-
-        // Scrollbar-accurate full-bleed width (100vw includes the scrollbar
-        // in most browsers, which causes a few px of real horizontal
-        // overflow — this uses the actual scrollbar-free width instead).
-        // Recomputed on resize and once more after the page has rendered,
-        // since the scrollbar (and thus clientWidth) isn't settled yet
-        // this early in <head>.
-        function setFullBleed() {
-          document.documentElement.style.setProperty('--vw', document.documentElement.clientWidth + 'px');
-        }
-        setFullBleed();
-        window.__setFullBleed = setFullBleed;
-        window.addEventListener('resize', setFullBleed);
+        var t = 'light';
+        try { t = localStorage.getItem('theme') || 'light'; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
       })();
     </script>
+    <noscript><style>#loader{display:none!important}html.is-loading{overflow:auto!important}</style></noscript>
   </head>
   <body>
-    <div class="cursor-glow" aria-hidden="true"></div>
-    <div class="cursor-ring" aria-hidden="true"></div>
-    <div class="cursor-dot" aria-hidden="true"></div>
+    <!-- Pantalla de carga: un mini pipeline. Los paquetes pasan por Datos, API, Automatización e IA
+         mientras el nombre "se compila". Al llegar al 100 % un círculo naranja abre la página. -->
+    <div id="loader" class="loader" role="status" aria-live="polite" aria-label="Cargando el portfolio">
+      <div class="ld-inner">
+        <div class="ld-name" aria-hidden="true">
+          <div class="ld-title" id="ld-title" data-text="Enrique Sáenz de Urturi">Enrique Sáenz de Urturi</div>
+          <p class="ld-role">Backend · Datos · Automatización · IA</p>
+        </div>
+        <div class="ld-flow" aria-hidden="true">
+          <div class="ld-line"><i id="ld-fill"></i></div>
+          <ol class="ld-nodes">
+            <li class="ld-node"><span class="dot"></span><span class="lbl">Datos</span></li>
+            <li class="ld-node"><span class="dot"></span><span class="lbl">API</span></li>
+            <li class="ld-node"><span class="dot"></span><span class="lbl">Automatiza</span></li>
+            <li class="ld-node"><span class="dot"></span><span class="lbl">IA</span></li>
+          </ol>
+          <div class="ld-packets" id="ld-packets"></div>
+        </div>
+        <div class="ld-status">
+          <span id="ld-msg">Leyendo datos</span>
+          <span><b id="ld-pct">0</b> %</span>
+        </div>
+      </div>
+      <div class="ld-wipe" id="ld-wipe"></div>
+    </div>
+
     <slot />
+
+    <!-- Red de seguridad: si el JS principal no arranca, el loader no bloquea la página -->
     <script is:inline>
-      (function () {
-        var themeBtn = document.getElementById('theme-toggle');
-        if (themeBtn) {
-          themeBtn.addEventListener('click', function () {
-            var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            window.__applyTheme(next);
-            try { localStorage.setItem('theme', next); } catch (e) {}
-          });
+      setTimeout(function () {
+        var l = document.getElementById('loader');
+        if (l && !window.__appReady) {
+          l.parentNode && l.parentNode.removeChild(l);
+          document.documentElement.classList.remove('is-loading');
         }
-
-        // Custom cursor
-        var isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!isTouchDevice) {
-          var dot = document.querySelector('.cursor-dot');
-          var ring = document.querySelector('.cursor-ring');
-          var glow = document.querySelector('.cursor-glow');
-          var shown = false;
-          function moveCursor(x, y) {
-            if (!shown) { shown = true; dot.style.opacity = '1'; ring.style.opacity = '1'; if (glow) glow.style.opacity = '1'; }
-            dot.style.transform = 'translate3d(' + (x - 5) + 'px, ' + (y - 5) + 'px, 0)';
-            ring.style.transform = 'translate3d(' + (x - 17) + 'px, ' + (y - 17) + 'px, 0)';
-          }
-          window.addEventListener('pointermove', function (e) { moveCursor(e.clientX, e.clientY); });
-
-          // Glow trails a little behind for a soft, ambient feel
-          if (glow && !reduceMotion) {
-            var gx = -9999, gy = -9999, tx = -9999, ty = -9999;
-            window.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });
-            (function glowLoop() {
-              gx += (tx - gx) * 0.08;
-              gy += (ty - gy) * 0.08;
-              glow.style.transform = 'translate3d(' + (gx - 230) + 'px, ' + (gy - 230) + 'px, 0)';
-              requestAnimationFrame(glowLoop);
-            })();
-          } else if (glow) {
-            window.addEventListener('pointermove', function (e) {
-              glow.style.transform = 'translate3d(' + (e.clientX - 230) + 'px, ' + (e.clientY - 230) + 'px, 0)';
-            });
-          }
-          document.body.classList.add('has-custom-cursor');
-          function bindHoverTargets() {
-            document.querySelectorAll('a, button, .card, .skill-tags span').forEach(function (el) {
-              if (el.__cursorBound) return;
-              el.__cursorBound = true;
-              el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-active'); });
-              el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-active'); });
-            });
-          }
-          bindHoverTargets();
-          new MutationObserver(bindHoverTargets).observe(document.body, { childList: true, subtree: true });
-        }
-      })();
+      }, 15000);
+    </script>
+    <script>
+      import '../scripts/main';
     </script>
   </body>
 </html>

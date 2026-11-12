@@ -24,3 +24,8 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# archivos privados o generados que no se publican
+CV_Enrique_memorandum.pdf
+LinkedIn_mejoras.md
+CV_Enrique_Saenz_de_Urturi.docx
