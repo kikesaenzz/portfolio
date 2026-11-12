@@ -252,7 +252,6 @@ function buildAnimations() {
         },
       });
     }
-    return () => { $('.cap')?.classList.remove('static'); $('.casos')?.classList.remove('static'); };
   });
   // Proyectos propios: tarjetas apiladas y parallax solo en pantallas anchas (en móvil, lista simple)
   mm.add('(min-width: 900px)', () => {
@@ -267,6 +266,8 @@ function buildAnimations() {
   mm.add('(max-width: 899px), (max-height: 639px)', () => {
     $('.cap')?.classList.add('static');
     $('.casos')?.classList.add('static');
+    // Al volver a una ventana grande se quita el modo apilado
+    return () => { $('.cap')?.classList.remove('static'); $('.casos')?.classList.remove('static'); };
   });
 }
 
