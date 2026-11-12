@@ -211,7 +211,7 @@ function buildAnimations() {
 
   /* ---- escenas fijadas (solo escritorio con altura suficiente) ---- */
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 900px) and (min-height: 760px)', () => {
+  mm.add('(min-width: 900px) and (min-height: 640px)', () => {
     // 02 Qué hago: cuatro áreas que cambian al deslizar
     const panels = $$('.cap-panel');
     const items = $$('.cap-item');
@@ -264,7 +264,7 @@ function buildAnimations() {
       }
     });
   });
-  mm.add('(max-width: 899px), (max-height: 759px)', () => {
+  mm.add('(max-width: 899px), (max-height: 639px)', () => {
     $('.cap')?.classList.add('static');
     $('.casos')?.classList.add('static');
   });
